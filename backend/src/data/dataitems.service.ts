@@ -6,6 +6,7 @@
 import { BaseDataItem, BaseItemArray, DataItem } from "./data.interface";
 import { DataItems } from "./dataitems.interface";
 import dataJson from '../database/data.json';
+const fs = require('fs');
 /**
  * In-Memory Store
  */
@@ -52,4 +53,19 @@ export const remove = async (id: number): Promise<null | void> => {
     }
 
     delete dataItems.data[id];
+};
+
+export const updateJson = async (container: BaseItemArray): Promise<null | void> => {
+    const json = JSON.stringify(container, null, 2);
+    fs
+    fs.writeFile('../database/data.json', json, (err: any) => {
+        // throws an error, you could also catch it here
+        if (err) throw err;
+
+        // success case, the file was saved
+        console.log('File saved!');
+    });
+    if (!container) {
+        return null;
+    }
 };

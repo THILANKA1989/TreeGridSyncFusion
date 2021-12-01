@@ -10,7 +10,6 @@ export const itemsRouter = express.Router();
  */
 
 // GET items
-
 itemsRouter.get("/", async (req: Request, res: Response) => {
     try {
         const items: DataItem[] = await ItemService.findAll();
@@ -22,7 +21,6 @@ itemsRouter.get("/", async (req: Request, res: Response) => {
 });
 
 // GET items/:id
-
 itemsRouter.get("/:id", async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
 
@@ -40,7 +38,6 @@ itemsRouter.get("/:id", async (req: Request, res: Response) => {
 });
 
 // POST items
-
 itemsRouter.post("/", async (req: Request, res: Response) => {
     try {
         const item: BaseDataItem = req.body;
@@ -54,7 +51,6 @@ itemsRouter.post("/", async (req: Request, res: Response) => {
 });
 
 // PUT items/:id
-
 itemsRouter.put("/:id", async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
 
@@ -77,12 +73,21 @@ itemsRouter.put("/:id", async (req: Request, res: Response) => {
 });
 
 // DELETE items/:id
-
 itemsRouter.delete("/:id", async (req: Request, res: Response) => {
     try {
         const id: number = parseInt(req.params.id);
         await ItemService.remove(id);
 
+        res.sendStatus(204);
+    } catch (e) {
+        res.status(500).send(e.message);
+    }
+});
+
+itemsRouter.post("/updatejson", async (req: Request, res: Response) => {
+    try {
+
+        ItemService.updateJson(req.body);
         res.sendStatus(204);
     } catch (e) {
         res.status(500).send(e.message);
