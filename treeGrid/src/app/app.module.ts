@@ -10,6 +10,7 @@ import { appRoutes } from './routes';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { FilterService, PageService, SortService, TreeGridModule } from '@syncfusion/ej2-angular-treegrid';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,7 @@ import { FilterService, PageService, SortService, TreeGridModule } from '@syncfu
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,     
+    AppRoutingModule, HttpClientModule,
     RouterModule.forRoot(appRoutes,{
       anchorScrolling : 'enabled'
    }), BrowserAnimationsModule,
@@ -28,7 +29,7 @@ import { FilterService, PageService, SortService, TreeGridModule } from '@syncfu
    TreeGridModule 
    // Registering EJ2 Button Module
   ],
-  providers: [PageService,
+  providers: [PageService, HttpClientModule,
     SortService,
     FilterService],
   bootstrap: [AppComponent],

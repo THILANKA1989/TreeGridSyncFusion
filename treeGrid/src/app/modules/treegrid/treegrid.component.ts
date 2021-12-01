@@ -1,10 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ColumnChooserService, ContextMenuService, EditService, EditSettingsModel, ExcelExportService, PageService, PageSettingsModel, PdfExportService, ResizeService, SortService, ToolbarService, TreeGridComponent } from '@syncfusion/ej2-angular-treegrid';
-import { sampleData } from 'src/app/data/datasource';
 import { DropDownListComponent, ChangeEventArgs } from '@syncfusion/ej2-angular-dropdowns';
 import { ContextMenuClickEventArgs, ContextMenuItemModel } from '@syncfusion/ej2-grids/src/grid';
 import { BeforeOpenCloseEventArgs } from '@syncfusion/ej2-inputs';
 import { MenuEventArgs } from '@syncfusion/ej2-navigations';
+import { DataService } from '../../../services/data.service';
+import { ResponseModel } from '../../../apiutils/response-model';
 
 @Component({
   selector: 'app-treegrid',
@@ -28,6 +29,8 @@ export class TreegridComponent implements OnInit {
   public fields2: Object | undefined;
   public d3data: Object | undefined;
   public fields3: Object | undefined;
+  sampleData: any;
+
 
   @ViewChild('treegrid')
   public treegrid!: TreeGridComponent;
@@ -54,11 +57,11 @@ export class TreegridComponent implements OnInit {
     { text: 'Paste Next', target: '.e-content', id: 'paste-next' },
     { text: 'Paste Child', target: '.e-content', id: 'paste-child' }
   ];
-  constructor() {
+  constructor(private dataService: DataService) {
   }
 
   ngOnInit(): void {
-    this.data = sampleData;
+    this.getData();
     this.editparams = { params: { format: 'n' } };
     this.selectionSettings = { type: 'Multiple' };
     this.editing = { allowDeleting: true, allowEditing: true, mode: 'Row' };
@@ -127,5 +130,27 @@ export class TreegridComponent implements OnInit {
 //         document.querySelectorAll('li#collapserow')[0].setAttribute('style', 'display: ' + val + ';');
 //     }
 // }
+
+  getData() {
+    const searchQuery: any = {
+      Filters: {
+      },
+      Paging: {
+        PageNo: 1,
+        PageSize: 10
+      },
+      Sorting: [
+        {
+          ColumnName: 'id',
+          SortOrder: 'ASC'
+        }
+      ]
+    };
+    this.dataService.getAllData(searchQuery).subscribe((response: any) => {
+      console.log(response);
+      this.data = response;
+    }, error => {
+    });
+  }
   
 }
