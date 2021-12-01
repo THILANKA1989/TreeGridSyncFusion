@@ -3,31 +3,30 @@
 /**
  * Data Model Interfaces
  */
-import { BaseDataItem, DataItem } from "./data.interface";
+import { BaseDataItem, BaseItemArray, DataItem } from "./data.interface";
 import { DataItems } from "./dataitems.interface";
 import dataJson from '../database/data.json';
 /**
  * In-Memory Store
  */
-let dataResults = {} = dataJson;
-let dataItems: DataItems = dataResults.data;
+let dataItems: BaseItemArray = dataJson as unknown as BaseItemArray;
 /**
  * Service Methods
  */
 
-export const findAll = async (): Promise<DataItem[]> => Object.values(dataItems);
+export const findAll = async (): Promise<DataItem[]> => Object.values(dataItems.data);
 
-export const find = async (id: number): Promise<DataItem> => dataItems[id];
+export const find = async (id: number): Promise<DataItem> => dataItems.data[id];
 
 export const create = async (newItem: BaseDataItem): Promise<DataItem> => {
     const id = new Date().valueOf();
 
-    dataItems[id] = {
+    dataItems.data[id] = {
         id,
         ...newItem,
     };
 
-    return dataItems[id];
+    return dataItems.data[id];
 };
 
 export const update = async (
@@ -40,9 +39,9 @@ export const update = async (
         return null;
     }
 
-    dataItems[id] = { id, ...itemUpdate };
+    dataItems.data[id] = { id, ...itemUpdate };
 
-    return dataItems[id];
+    return dataItems.data[id];
 };
 
 export const remove = async (id: number): Promise<null | void> => {
@@ -52,5 +51,5 @@ export const remove = async (id: number): Promise<null | void> => {
         return null;
     }
 
-    delete dataItems[id];
+    delete dataItems.data[id];
 };

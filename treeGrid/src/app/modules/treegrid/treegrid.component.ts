@@ -49,20 +49,23 @@ export class TreegridComponent implements OnInit {
 
   @ViewChild('cellsection')
   cellsection!: ElementRef;
-
-  public contextMenuItemsModel: ContextMenuItemModel[] = [
-    { text: 'Add Child', target: '.e-content', id: 'add-child' },
-    { text: 'Delete Row', target: '.e-content', id: 'del-row' },
-    { text: 'Add Next', target: '.e-content', id: 'add-next' },
-    { text: 'Copy Row', target: '.e-content', id: 'copy-row' },
-    { text: 'Copy Rows', target: '.e-content', id: 'copy-rows' },
-    { text: 'Cut Row', target: '.e-content', id: 'cut-row' },
-    { text: 'Cut Rows', target: '.e-content', id: 'cut-rows' }
-  ];
+  contextMenuItemsModel: ContextMenuItemModel[] = [];
   constructor(private dataService: DataService) {
   }
 
   ngOnInit(): void {
+    this.contextMenuItemsModel = [
+      { text: 'Add Child', target: '.e-content', id: 'add-child' },
+      { text: 'Delete Row', target: '.e-content', id: 'del-row' },
+      { text: 'Add Next', target: '.e-content', id: 'add-next' },
+      { text: 'Copy Row', target: '.e-content', id: 'copy-row' },
+      { text: 'Copy Rows', target: '.e-content', id: 'copy-rows' },
+      { text: 'Cut Row', target: '.e-content', id: 'cut-row' },
+      { text: 'Cut Rows', target: '.e-content', id: 'cut-rows' }
+    ];
+    this.contextMenuItemsModel.push(
+      { text: 'Paste Next', target: '.e-content', id: 'paste-next' },
+      { text: 'Paste Child', target: '.e-content', id: 'paste-child' });
     this.getData();
     this.editparams = { params: { format: 'n' } };
     this.selectionSettings = { type: 'Multiple' };
@@ -114,7 +117,6 @@ export class TreegridComponent implements OnInit {
         this.contextMenuItemsModel.push(
           { text: 'Paste Next', target: '.e-content', id: 'paste-next' },
           { text: 'Paste Child', target: '.e-content', id: 'paste-child' });
-        this.treegrid.refresh();
         break;
       }
       case 'paste-child': {
@@ -122,6 +124,15 @@ export class TreegridComponent implements OnInit {
         let parentRow = args.rowInfo.rowData as BaseDataItem;
         parentRow.children.push(this.copiedRow);
         console.log(parentRow);
+        break;
+      }
+      case 'copy-rows': {
+        //statements;
+        this.copiedRow = args.rowInfo.rowData as BaseDataItem;
+        console.log(this.copiedRow);
+        this.contextMenuItemsModel.push(
+          { text: 'Paste Next', target: '.e-content', id: 'paste-next' },
+          { text: 'Paste Child', target: '.e-content', id: 'paste-child' });
         break;
       }
       default: {

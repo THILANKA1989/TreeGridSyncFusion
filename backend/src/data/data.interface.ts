@@ -1,3 +1,7 @@
+export interface BaseItemArray {
+    "data": DataItem[],
+    "lastIndex": number;
+}
 
 export interface BaseDataItem {
     code: string;

@@ -1,3 +1,9 @@
+export interface BaseItemArray {
+  "data": BaseDataItem[],
+  "lastIndex": number;
+}
+
+
 export interface BaseDataItem {
   code: string;
   isActive: boolean;
