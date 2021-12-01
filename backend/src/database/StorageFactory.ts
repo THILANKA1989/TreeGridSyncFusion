@@ -1,5 +1,5 @@
 import { Storage } from './IStorage';
-import { StorageImpl } from './storage';
+import { StorageImpl } from './Storage';
 
 export class StorageFactory {
     private static storage: Storage<any>;

@@ -2,22 +2,19 @@
   <div class="col-md-12">
     <ejs-treegrid [dataSource]='data' id="treegridcomp" [treeColumnIndex]='1' childMapping='subtasks'
       [allowPaging]='true' [contextMenuItems]="contextMenuItemsModel" [editSettings]='editing' [showColumnChooser]='true'
-      [selectionSettings]='selectionSettings' allowSorting='true' [toolbar]="toolbar" (contextMenuClick)='contextMenuClick($event)'  >
+      [selectionSettings]='selectionSettings' allowSorting='true' [toolbar]="toolbar"  childMapping='children' (contextMenuClick)='contextMenuClick($event)'  >
       <e-columns>
-        <e-column field='id' headerText='ID' textAlign='Right' width=30></e-column>
-        <e-column field='index' headerText='Index' textAlign='Right' width=30></e-column>
-        <e-column field='balance' headerText='Balance' textAlign='Right' width=30></e-column>
-        <e-column field='age' headerText='Age' textAlign='Right' width=30></e-column>
-        <e-column field='eyeColor' headerText='Eye Color' textAlign='Right'  [edit]='editparams'  editType='stringedit'> width=30></e-column>
-        <e-column field='name' headerText='Name' textAlign='Right'  [edit]='editparams'  editType='stringedit'> width=30></e-column>
-        <e-column field='gender' headerText='Gender' textAlign='Right' width=30></e-column>
-        <e-column field='company' headerText='Company' textAlign='Right'  [edit]='editparams'  editType='stringedit'> width=50></e-column>
-        <e-column field='email' headerText='Email' textAlign='Right'  [edit]='editparams'  editType='stringedit'> width=50></e-column>
-        <e-column field='phone' headerText='Phone' textAlign='Right' width=50  [edit]='editparams'  editType='stringedit'></e-column>
-        <e-column field='address' headerText='Address' textAlign='Right' width=60></e-column>
-        <e-column field='id' headerText='ID' textAlign='Right' width=30></e-column>
-        <e-column field='taskName' headerText='Task Name' textAlign='Left' editType='stringedit' width=200>
-        </e-column>
+        <e-column field='id' headerText='ID' textAlign='Right' width='7%'></e-column>
+        <e-column field='index' headerText='Index' textAlign='Right' width='7%'></e-column>
+        <e-column field='balance' headerText='Balance' textAlign='Right' width='7%'></e-column>
+        <e-column field='age' headerText='Age' textAlign='Right' width='7%'></e-column>
+        <e-column field='eyeColor' headerText='Eye Color' textAlign='Right' [edit]='editparams' editType='stringedit'> width='7%'></e-column>
+        <e-column field='name' headerText='Name' textAlign='Right' [edit]='editparams' editType='stringedit'> width='7%'></e-column>
+        <e-column field='gender' headerText='Gender' textAlign='Right' width='7%'></e-column>
+        <e-column field='company' headerText='Company' textAlign='Right' [edit]='editparams' editType='stringedit'> width='7%'></e-column>
+        <e-column field='email' headerText='Email' textAlign='Right' [edit]='editparams' editType='stringedit'> width='7%'></e-column>
+        <e-column field='phone' headerText='Phone' textAlign='Right' width='7%'  [edit]='editparams'  editType='stringedit'></e-column>
+        <e-column field='address' headerText='Address' textAlign='Right' width='7%'></e-column>
       </e-columns>
     </ejs-treegrid>
   </div>

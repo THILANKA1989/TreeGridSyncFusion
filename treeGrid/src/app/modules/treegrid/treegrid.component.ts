@@ -44,6 +44,7 @@ export class TreegridComponent implements OnInit {
   @ViewChild('dropdown3')
   public dropdown3!: DropDownListComponent;
 
+  public treeGridObj!: TreeGridComponent;
   @ViewChild('cellsection')
   cellsection!: ElementRef;
   public contextMenuItemsModel: ContextMenuItemModel[] = [
@@ -117,19 +118,19 @@ export class TreegridComponent implements OnInit {
     }
   }
 
-//   contextMenuOpen(arg: BeforeOpenCloseEventArgs) : void {
-//     let elem: Element = arg.event.target as Element;
-//     let uid: string = elem.closest('.e-row').getAttribute('data-uid');
-//     if (isNullOrUndefined(getValue('hasChildRecords', this.treeGridObj.grid.getRowObjectFromUID(uid).data))) {
-//         arg.cancel = true;
-//     } else {
-//         let flag: boolean = getValue('expanded', this.treeGridObj.grid.getRowObjectFromUID(uid).data);
-//         let val: string = flag ? 'none' : 'block';
-//         document.querySelectorAll('li#expandrow')[0].setAttribute('style', 'display: ' + val + ';');
-//         val = !flag ? 'none' : 'block';
-//         document.querySelectorAll('li#collapserow')[0].setAttribute('style', 'display: ' + val + ';');
-//     }
-// }
+  //contextMenuOpen(arg: BeforeOpenCloseEventArgs): void {
+  //  let elem: Element = arg.event.target as Element;
+  //  let uid: string = elem.closest('.e-row').getAttribute('data-uid');
+  //  if (isNullOrUndefined(this.getValue('hasChildRecords', this.treeGridObj.grid.getRowObjectFromUID(uid).data))) {
+  //    arg.cancel = true;
+  //  } else {
+  //    let flag: boolean = this.getValue('expanded', this.treeGridObj.grid.getRowObjectFromUID(uid).data);
+  //    let val: string = flag ? 'none' : 'block';
+  //    document.querySelectorAll('li#expandrow')[0].setAttribute('style', 'display: ' + val + ';');
+  //    val = !flag ? 'none' : 'block';
+  //    document.querySelectorAll('li#collapserow')[0].setAttribute('style', 'display: ' + val + ';');
+  //  }
+  //}
 
   getData() {
     const searchQuery: any = {
@@ -152,5 +153,9 @@ export class TreegridComponent implements OnInit {
     }, error => {
     });
   }
-  
+
+  getValue(arg0: string, data: Object): any {
+    throw new Error('Function not implemented.');
+  }
+
 }

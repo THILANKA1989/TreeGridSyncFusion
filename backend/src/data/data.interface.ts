@@ -17,8 +17,8 @@ export interface BaseDataItem {
     registered: string;
     latitude: number;
     longitude: number;
-    tags: string[]
-
+    tags: string[];
+    children: BaseDataItem[];
 
 }
 
