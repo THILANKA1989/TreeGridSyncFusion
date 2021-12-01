@@ -1,6 +1,5 @@
 
 export interface BaseDataItem {
-    index: number;
     code: string;
     isActive: boolean;
     balance: number;
@@ -23,5 +22,5 @@ export interface BaseDataItem {
 }
 
 export interface DataItem extends BaseDataItem {
-    id: string;
+    id: number;
 }

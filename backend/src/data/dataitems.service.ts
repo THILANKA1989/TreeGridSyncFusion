@@ -9,17 +9,18 @@ import dataJson from '../database/data.json';
 /**
  * In-Memory Store
  */
-let dataItems: DataItems = dataJson.data;
+let dataResults = {} = dataJson;
+let dataItems: DataItems = dataResults.data;
 /**
  * Service Methods
  */
 
 export const findAll = async (): Promise<DataItem[]> => Object.values(dataItems);
 
-export const find = async (id: string): Promise<DataItem> => dataItems[id];
+export const find = async (id: number): Promise<DataItem> => dataItems[id];
 
 export const create = async (newItem: BaseDataItem): Promise<DataItem> => {
-    const id = new Date().valueOf().toString();
+    const id = new Date().valueOf();
 
     dataItems[id] = {
         id,
@@ -30,7 +31,7 @@ export const create = async (newItem: BaseDataItem): Promise<DataItem> => {
 };
 
 export const update = async (
-    id: string,
+    id: number,
     itemUpdate: BaseDataItem
 ): Promise<DataItem | null> => {
     const item = await find(id);
@@ -44,7 +45,7 @@ export const update = async (
     return dataItems[id];
 };
 
-export const remove = async (id: string): Promise<null | void> => {
+export const remove = async (id: number): Promise<null | void> => {
     const item = await find(id);
 
     if (!item) {

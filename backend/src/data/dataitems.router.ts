@@ -24,7 +24,7 @@ itemsRouter.get("/", async (req: Request, res: Response) => {
 // GET items/:id
 
 itemsRouter.get("/:id", async (req: Request, res: Response) => {
-    const id: string = req.params.id;
+    const id: number = parseInt(req.params.id);
 
     try {
         const item: DataItem = await ItemService.find(id);
@@ -56,7 +56,7 @@ itemsRouter.post("/", async (req: Request, res: Response) => {
 // PUT items/:id
 
 itemsRouter.put("/:id", async (req: Request, res: Response) => {
-    const id: string = req.params.id;
+    const id: number = parseInt(req.params.id);
 
     try {
         const itemUpdate: DataItem = req.body;
@@ -80,7 +80,7 @@ itemsRouter.put("/:id", async (req: Request, res: Response) => {
 
 itemsRouter.delete("/:id", async (req: Request, res: Response) => {
     try {
-        const id: string = req.params.id;
+        const id: number = parseInt(req.params.id);
         await ItemService.remove(id);
 
         res.sendStatus(204);

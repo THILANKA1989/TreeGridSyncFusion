@@ -6,6 +6,7 @@ import { BeforeOpenCloseEventArgs } from '@syncfusion/ej2-inputs';
 import { MenuEventArgs } from '@syncfusion/ej2-navigations';
 import { DataService } from '../../../services/data.service';
 import { ResponseModel } from '../../../apiutils/response-model';
+import { BaseDataItem } from '../../models/data.model';
 
 @Component({
   selector: 'app-treegrid',
@@ -30,6 +31,8 @@ export class TreegridComponent implements OnInit {
   public d3data: Object | undefined;
   public fields3: Object | undefined;
   sampleData: any;
+  selectedRows: any[] = [];
+  copiedRow: BaseDataItem;
 
 
   @ViewChild('treegrid')
@@ -44,19 +47,17 @@ export class TreegridComponent implements OnInit {
   @ViewChild('dropdown3')
   public dropdown3!: DropDownListComponent;
 
-  public treeGridObj!: TreeGridComponent;
   @ViewChild('cellsection')
   cellsection!: ElementRef;
+
   public contextMenuItemsModel: ContextMenuItemModel[] = [
     { text: 'Add Child', target: '.e-content', id: 'add-child' },
-    { text: 'Delelte Row', target: '.e-content', id: 'del-row' },
+    { text: 'Delete Row', target: '.e-content', id: 'del-row' },
     { text: 'Add Next', target: '.e-content', id: 'add-next' },
     { text: 'Copy Row', target: '.e-content', id: 'copy-row' },
     { text: 'Copy Rows', target: '.e-content', id: 'copy-rows' },
     { text: 'Cut Row', target: '.e-content', id: 'cut-row' },
-    { text: 'Cut Rows', target: '.e-content', id: 'cut-rows' },
-    { text: 'Paste Next', target: '.e-content', id: 'paste-next' },
-    { text: 'Paste Child', target: '.e-content', id: 'paste-child' }
+    { text: 'Cut Rows', target: '.e-content', id: 'cut-rows' }
   ];
   constructor(private dataService: DataService) {
   }
@@ -105,6 +106,29 @@ export class TreegridComponent implements OnInit {
     this.treegrid.selectionSettings.cellSelectionMode = cellmode;
   }
   contextMenuClick(args: ContextMenuClickEventArgs): void {
+    switch (args.item.id) {
+      case 'copy-row': {
+        //statements;
+        this.copiedRow = args.rowInfo.rowData as BaseDataItem;
+        console.log(this.copiedRow);
+        this.contextMenuItemsModel.push(
+          { text: 'Paste Next', target: '.e-content', id: 'paste-next' },
+          { text: 'Paste Child', target: '.e-content', id: 'paste-child' });
+        this.treegrid.refresh();
+        break;
+      }
+      case 'paste-child': {
+        //statements;
+        let parentRow = args.rowInfo.rowData as BaseDataItem;
+        parentRow.children.push(this.copiedRow);
+        console.log(parentRow);
+        break;
+      }
+      default: {
+        //statements; 
+        break;
+      }
+    }
     var idx: any = args.rowInfo?.rowIndex
     if (args.item.id === 'addchild') {        // add child  
       var data = { taskID: 88, priority: "high" };
@@ -118,19 +142,21 @@ export class TreegridComponent implements OnInit {
     }
   }
 
-  //contextMenuOpen(arg: BeforeOpenCloseEventArgs): void {
-  //  let elem: Element = arg.event.target as Element;
-  //  let uid: string = elem.closest('.e-row').getAttribute('data-uid');
-  //  if (isNullOrUndefined(this.getValue('hasChildRecords', this.treeGridObj.grid.getRowObjectFromUID(uid).data))) {
-  //    arg.cancel = true;
-  //  } else {
-  //    let flag: boolean = this.getValue('expanded', this.treeGridObj.grid.getRowObjectFromUID(uid).data);
-  //    let val: string = flag ? 'none' : 'block';
-  //    document.querySelectorAll('li#expandrow')[0].setAttribute('style', 'display: ' + val + ';');
-  //    val = !flag ? 'none' : 'block';
-  //    document.querySelectorAll('li#collapserow')[0].setAttribute('style', 'display: ' + val + ';');
-  //  }
-  //}
+  contextMenuOpen(arg: BeforeOpenCloseEventArgs): void {
+    //console.log(arg.rowInfo.rowData);
+    //let elem: Element = arg.event.target as Element;
+    //let uid: string = elem.closest('.e-row').getAttribute('data-uid');
+    //console.log(this.treegrid.grid.getRowObjectFromUID(uid).data);
+    //if (this.treegrid.grid.getRowObjectFromUID(uid).data) {
+    //  arg.cancel = true;
+    //} else {
+    //  let flag: boolean = this.getValue('expanded', this.treegrid.grid.getRowObjectFromUID(uid).data);
+    //  let val: string = flag ? 'none' : 'block';
+    //  document.querySelectorAll('li#expandrow')[0].setAttribute('style', 'display: ' + val + ';');
+    //  val = !flag ? 'none' : 'block';
+    //  document.querySelectorAll('li#collapserow')[0].setAttribute('style', 'display: ' + val + ';');
+    //}
+  }
 
   getData() {
     const searchQuery: any = {
@@ -152,6 +178,10 @@ export class TreegridComponent implements OnInit {
       this.data = response;
     }, error => {
     });
+  }
+
+  getRowData(args: any): void {
+    console.log(this.treegrid.getRowInfo(args.target));
   }
 
   getValue(arg0: string, data: Object): any {

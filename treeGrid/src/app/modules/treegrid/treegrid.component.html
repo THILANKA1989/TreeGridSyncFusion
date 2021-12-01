@@ -1,11 +1,11 @@
 <div class="row">
   <div class="col-md-12">
-    <ejs-treegrid [dataSource]='data' id="treegridcomp" [treeColumnIndex]='1' childMapping='subtasks'
+    <ejs-treegrid [dataSource]='data' id="treegridcomp" [treeColumnIndex]='1' childMapping='subtasks'  #treegrid
       [allowPaging]='true' [contextMenuItems]="contextMenuItemsModel" [editSettings]='editing' [showColumnChooser]='true'
-      [selectionSettings]='selectionSettings' allowSorting='true' [toolbar]="toolbar"  childMapping='children' (contextMenuClick)='contextMenuClick($event)'  >
+      [selectionSettings]='selectionSettings' allowSorting='true' [toolbar]="toolbar"  childMapping='children' (contextMenuClick)='contextMenuClick($event)'  (contextMenuOpen)='contextMenuOpen($event)' >
       <e-columns>
-        <e-column field='id' headerText='ID' textAlign='Right' width='7%'></e-column>
-        <e-column field='index' headerText='Index' textAlign='Right' width='7%'></e-column>
+        <e-column type='checkbox' width='7%'></e-column>
+        <e-column field='id' headerText='Item ID' textAlign='Right' width='7%'></e-column>
         <e-column field='balance' headerText='Balance' textAlign='Right' width='7%'></e-column>
         <e-column field='age' headerText='Age' textAlign='Right' width='7%'></e-column>
         <e-column field='eyeColor' headerText='Eye Color' textAlign='Right' [edit]='editparams' editType='stringedit'> width='7%'></e-column>
