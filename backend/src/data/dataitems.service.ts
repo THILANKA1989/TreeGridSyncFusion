@@ -57,7 +57,6 @@ export const remove = async (id: number): Promise<null | void> => {
 
 export const updateJson = async (container: BaseItemArray): Promise<null | void> => {
     const json = JSON.stringify(container, null, 2);
-    fs
     fs.writeFile('../database/data.json', json, (err: any) => {
         // throws an error, you could also catch it here
         if (err) throw err;
@@ -68,4 +67,21 @@ export const updateJson = async (container: BaseItemArray): Promise<null | void>
     if (!container) {
         return null;
     }
+};
+
+export const getMaxRowNumber = async (): Promise<number> => {
+    return dataItems.lastIndex;
+};
+
+export const setMaxRowNumber = async (container: BaseItemArray, currentIndex: number): Promise<number> => {
+    container.lastIndex = currentIndex + 1;
+    const json = JSON.stringify(container, null, 2);
+    fs.writeFile('../database/data.json', json, (err: any) => {
+        // throws an error, you could also catch it here
+        if (err) throw err;
+
+        // success case, the file was saved
+        console.log('File saved!');
+    });
+    return container.lastIndex;
 };

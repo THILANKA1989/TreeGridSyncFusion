@@ -86,9 +86,27 @@ itemsRouter.delete("/:id", async (req: Request, res: Response) => {
 
 itemsRouter.post("/updatejson", async (req: Request, res: Response) => {
     try {
-
         ItemService.updateJson(req.body);
         res.sendStatus(204);
+    } catch (e) {
+        res.status(500).send(e.message);
+    }
+});
+
+itemsRouter.post("/setMax", async (req: Request, res: Response) => {
+    try {
+        ItemService.getMaxRowNumber();
+        res.sendStatus(204);
+    } catch (e) {
+        res.status(500).send(e.message);
+    }
+});
+
+itemsRouter.get("/getMax", async (req: Request, res: Response) => {
+    try {
+        let number = ItemService.getMaxRowNumber();
+
+        res.status(200).send(number);
     } catch (e) {
         res.status(500).send(e.message);
     }

@@ -5,7 +5,6 @@ import { ContextMenuClickEventArgs, ContextMenuItemModel } from '@syncfusion/ej2
 import { BeforeOpenCloseEventArgs } from '@syncfusion/ej2-inputs';
 import { MenuEventArgs } from '@syncfusion/ej2-navigations';
 import { DataService } from '../../../services/data.service';
-import { ResponseModel } from '../../../apiutils/response-model';
 import { BaseDataItem } from '../../models/data.model';
 
 @Component({
@@ -122,7 +121,13 @@ export class TreegridComponent implements OnInit {
       case 'paste-child': {
         //statements;
         let parentRow = args.rowInfo.rowData as BaseDataItem;
+        this.treegrid.addRecord(this.copiedRow, args.rowInfo.rowIndex);
+        if (!parentRow.children) {
+          parentRow.children = [];
+        }
         parentRow.children.push(this.copiedRow);
+        this.treegrid.refresh();
+        this.sampleData = this.treegrid.dataSource;
         console.log(parentRow);
         break;
       }
@@ -154,7 +159,8 @@ export class TreegridComponent implements OnInit {
   }
 
   contextMenuOpen(arg: BeforeOpenCloseEventArgs): void {
-    //console.log(arg.rowInfo.rowData);
+
+    console.log(arg.rowInfo.rowIndex);
     //let elem: Element = arg.event.target as Element;
     //let uid: string = elem.closest('.e-row').getAttribute('data-uid');
     //console.log(this.treegrid.grid.getRowObjectFromUID(uid).data);
@@ -170,20 +176,7 @@ export class TreegridComponent implements OnInit {
   }
 
   getData() {
-    const searchQuery: any = {
-      Filters: {
-      },
-      Paging: {
-        PageNo: 1,
-        PageSize: 10
-      },
-      Sorting: [
-        {
-          ColumnName: 'id',
-          SortOrder: 'ASC'
-        }
-      ]
-    };
+    const searchQuery: any = {};
     this.dataService.getAllData(searchQuery).subscribe((response: any) => {
       console.log(response);
       this.data = response;
