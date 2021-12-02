@@ -1,4 +1,4 @@
-class RequestBody<T> {
+class RequestBody {
   pageNumber: number;
   pageSize: number;
   sorting: sorting[];

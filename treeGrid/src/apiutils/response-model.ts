@@ -1,4 +1,4 @@
-class ResonseBody {
+class ResponseBody {
   content: any;
   nextPage: number;
   prevPage: number;

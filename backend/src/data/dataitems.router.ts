@@ -1,14 +1,22 @@
 
 import express, { Request, Response } from "express";
 import * as ItemService from "./dataitems.service";
-import { BaseDataItem, DataItem } from "./data.interface";
+import { BaseDataItem, BaseItemArray, DataItem } from "./data.interface";
 
 export const itemsRouter = express.Router();
 
 /**
  * Controller Definitions
  */
-
+// GET parernt
+itemsRouter.get("/parent", async (req: Request, res: Response) => {
+    try {
+        const item: BaseItemArray = await ItemService.findParent();
+        res.status(200).send(item);
+    } catch (e) {
+        res.status(500).send(e.message);
+    }
+});
 // GET items
 itemsRouter.get("/", async (req: Request, res: Response) => {
     try {
@@ -93,9 +101,9 @@ itemsRouter.post("/updatejson", async (req: Request, res: Response) => {
     }
 });
 
-itemsRouter.post("/setMax", async (req: Request, res: Response) => {
+itemsRouter.post("/setMax/", async (req: Request, res: Response) => {
     try {
-        ItemService.getMaxRowNumber();
+        ItemService.setMaxRowNumber(req.body,parseInt(req.params.id));
         res.sendStatus(204);
     } catch (e) {
         res.status(500).send(e.message);

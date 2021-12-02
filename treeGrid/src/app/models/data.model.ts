@@ -5,6 +5,7 @@ export interface BaseItemArray {
 
 
 export interface BaseDataItem {
+  id: number;
   code: string;
   isActive: boolean;
   balance: number;
@@ -27,5 +28,4 @@ export interface BaseDataItem {
 }
 
 export interface DataItem extends BaseDataItem {
-  id: number;
 }

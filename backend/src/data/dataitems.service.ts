@@ -7,6 +7,8 @@ import { BaseDataItem, BaseItemArray, DataItem } from "./data.interface";
 import { DataItems } from "./dataitems.interface";
 import dataJson from '../database/data.json';
 const fs = require('fs');
+var AsyncLock = require('async-lock');
+var lock = new AsyncLock();
 /**
  * In-Memory Store
  */
@@ -15,6 +17,7 @@ let dataItems: BaseItemArray = dataJson as unknown as BaseItemArray;
  * Service Methods
  */
 
+export const findParent = async (): Promise<BaseItemArray> => dataItems;
 export const findAll = async (): Promise<DataItem[]> => Object.values(dataItems.data);
 
 export const find = async (id: number): Promise<DataItem> => dataItems.data[id];
@@ -70,18 +73,25 @@ export const updateJson = async (container: BaseItemArray): Promise<null | void>
 };
 
 export const getMaxRowNumber = async (): Promise<number> => {
+    console.log(dataItems.lastIndex);
     return dataItems.lastIndex;
 };
 
 export const setMaxRowNumber = async (container: BaseItemArray, currentIndex: number): Promise<number> => {
-    container.lastIndex = currentIndex + 1;
-    const json = JSON.stringify(container, null, 2);
-    fs.writeFile('../database/data.json', json, (err: any) => {
-        // throws an error, you could also catch it here
-        if (err) throw err;
+    //lock.acquire(key, function (done) {
+    //    // async work    container.lastIndex = currentIndex + 1;
+    //    const json = JSON.stringify(container, null, 2);
+    //    fs.writeFile('../database/data.json', json, (err: any) => {
+    //        // throws an error, you could also catch it here
+    //        if (err) throw err;
 
-        // success case, the file was saved
-        console.log('File saved!');
-    });
+    //        // success case, the file was saved
+    //        console.log('File saved!');
+    //    });
+    //    done(err, ret);
+    //}, function (err, ret) {
+    //    // lock released
+    //}, opts);
+
     return container.lastIndex;
 };

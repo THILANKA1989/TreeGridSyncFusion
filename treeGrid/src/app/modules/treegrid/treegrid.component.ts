@@ -32,6 +32,7 @@ export class TreegridComponent implements OnInit {
   sampleData: any;
   selectedRows: any[] = [];
   copiedRow: BaseDataItem;
+  totalRowCount: number;
 
 
   @ViewChild('treegrid')
@@ -121,13 +122,14 @@ export class TreegridComponent implements OnInit {
       case 'paste-child': {
         //statements;
         let parentRow = args.rowInfo.rowData as BaseDataItem;
+        this.copiedRow.id = this.totalRowCount + 1;
         this.treegrid.addRecord(this.copiedRow, args.rowInfo.rowIndex);
         if (!parentRow.children) {
           parentRow.children = [];
         }
         parentRow.children.push(this.copiedRow);
-        this.treegrid.refresh();
         this.sampleData = this.treegrid.dataSource;
+        this.treegrid.refresh();
         console.log(parentRow);
         break;
       }
@@ -179,7 +181,8 @@ export class TreegridComponent implements OnInit {
     const searchQuery: any = {};
     this.dataService.getAllData(searchQuery).subscribe((response: any) => {
       console.log(response);
-      this.data = response;
+      this.data = response.data;
+      this.totalRowCount = response.lastIndex;
     }, error => {
     });
   }

@@ -14,7 +14,7 @@ export class DataService {
 
   getAllData(requestForm: any): Observable<any> {
     //created for body and pagination requests not implementing that for now
-    return this.http.get<any>(this.baseUrl + 'data');
+    return this.http.get<any>(this.baseUrl + 'parent');
   }
 
   getSingleData(id: string): Observable<any> {
