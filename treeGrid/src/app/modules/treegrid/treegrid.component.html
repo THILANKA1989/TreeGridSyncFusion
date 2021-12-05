@@ -1,9 +1,9 @@
 <div class="row">
   <div class="col-md-12">
-    <ejs-treegrid [dataSource]='data' id="treegridcomp" [treeColumnIndex]='1' childMapping='subtasks'  #treegrid
+    <ejs-treegrid [dataSource]='data' id="treegridcomp" [treeColumnIndex]='1' childMapping='children' #treegrid idMapping="id" parentIdMapping="parentId" 
       [allowPaging]='true' [contextMenuItems]="contextMenuItemsModel" [editSettings]='editing' [showColumnChooser]='true'
-      [selectionSettings]='selectionSettings' allowSorting='true' [toolbar]="toolbar"  childMapping='children' (contextMenuClick)='contextMenuClick($event)'  (contextMenuOpen)='contextMenuOpen($event)' >
-      <e-columns>
+      [selectionSettings]='selectionSettings' allowSorting='true' [toolbar]='toolbarOptions' (contextMenuClick)='contextMenuClick($event)'  (contextMenuOpen)='contextMenuOpen($event)' >
+      <e-columns >
         <e-column type='checkbox' width='7%'></e-column>
         <e-column field='id' headerText='Item ID' textAlign='Right' width='7%'></e-column>
         <e-column field='balance' headerText='Balance' textAlign='Right' width='7%'></e-column>

@@ -60,7 +60,9 @@ export const remove = async (id: number): Promise<null | void> => {
 
 export const updateJson = async (container: BaseItemArray): Promise<null | void> => {
     const json = JSON.stringify(container, null, 2);
-    fs.writeFile('../database/data.json', json, (err: any) => {
+    //let jsonBody = JSON.parse(json);
+    //console.log(json);
+    fs.writeFile('src/database/data.json', json, (err: any) => {
         // throws an error, you could also catch it here
         if (err) throw err;
 
@@ -95,3 +97,23 @@ export const setMaxRowNumber = async (container: BaseItemArray, currentIndex: nu
 
     return container.lastIndex;
 };
+
+export const paginatedData = async (pageSize: any, pageNumber: any): Promise<ResponseBody> => {
+    console.log(pageSize);
+    console.log(pageNumber);
+    const baseItems = {
+        "data": dataItems.data.slice((pageNumber - 1) * pageSize, pageNumber * pageSize),
+        "lastIndex": dataItems.lastIndex
+    } as BaseItemArray;
+
+    const response = {
+        "content": baseItems,
+        "nextPage": pageNumber == (dataItems.data.length / pageSize) ? null : pageNumber + 1,
+        "prevPage": pageNumber == 1 ? null : pageNumber - 1,
+        "statusCode": 200,
+        "pageCount": Math.ceil(dataItems.data.length / pageSize),
+        "totalRowCount": dataItems.data.length
+    } as ResponseBody
+
+    return response;
+}

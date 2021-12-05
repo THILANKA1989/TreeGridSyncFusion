@@ -2,9 +2,13 @@
 import express, { Request, Response } from "express";
 import * as ItemService from "./dataitems.service";
 import { BaseDataItem, BaseItemArray, DataItem } from "./data.interface";
+var AsyncLock = require('async-lock');
+var lock = new AsyncLock();
 
+let app = express();
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 export const itemsRouter = express.Router();
-
 /**
  * Controller Definitions
  */
@@ -15,6 +19,18 @@ itemsRouter.get("/parent", async (req: Request, res: Response) => {
         res.status(200).send(item);
     } catch (e) {
         res.status(500).send(e.message);
+    }
+});
+
+itemsRouter.get("/paginatedAll/:pageSize/:pageNumber", async (req: Request, res: Response) => {
+    try {
+        console.log(req.params.pageSize);
+        console.log(req.params.pageNumber);
+
+        const item: ResponseBody = await ItemService.paginatedData(parseInt(req.params.pageSize), parseInt(req.params.pageNumber));
+        res.status(200).send(item);
+    } catch (e) {
+
     }
 });
 // GET items
@@ -49,6 +65,7 @@ itemsRouter.get("/:id", async (req: Request, res: Response) => {
 itemsRouter.post("/", async (req: Request, res: Response) => {
     try {
         const item: BaseDataItem = req.body;
+       
 
         const newItem = await ItemService.create(item);
 
@@ -93,9 +110,16 @@ itemsRouter.delete("/:id", async (req: Request, res: Response) => {
 });
 
 itemsRouter.post("/updatejson", async (req: Request, res: Response) => {
+    let Guid: string = "";
+
     try {
-        ItemService.updateJson(req.body);
-        res.sendStatus(204);
+        lock.acquire(Guid, function () {
+            // async work
+            ItemService.updateJson(req.body);
+            res.sendStatus(204);
+        }, function () {
+            // lock released
+        });
     } catch (e) {
         res.status(500).send(e.message);
     }

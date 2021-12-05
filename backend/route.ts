@@ -1,6 +1,6 @@
 import * as express from 'express';
 import { NextFunction, Response, Request, Router } from 'express';
-import { StorageFactory } from './database/StorageFactory';
+import { StorageFactory } from './src/database/StorageFactory';
 
 export function makeCrud<T>(entityName: string, storagePath: string): Router {
     const router = express.Router();
