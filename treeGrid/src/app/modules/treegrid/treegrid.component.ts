@@ -1,15 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ColumnChooserService, ContextMenuService, EditService, EditSettingsModel, ExcelExportService, PageService, PageSettingsModel, PdfExportService, ResizeService, SortService, ToolbarItems, ToolbarService, TreeGridComponent } from '@syncfusion/ej2-angular-treegrid';
-import { DropDownListComponent, ChangeEventArgs } from '@syncfusion/ej2-angular-dropdowns';
 import { ContextMenuClickEventArgs, ContextMenuItemModel } from '@syncfusion/ej2-grids/src/grid';
 import { BeforeOpenCloseEventArgs } from '@syncfusion/ej2-inputs';
-import { MenuEventArgs } from '@syncfusion/ej2-navigations';
 import { DataService } from '../../../services/data.service';
 import { BaseDataItem, BaseItemArray } from '../../models/data.model';
 import { Subscription } from 'rxjs';
 import { Observable } from 'rxjs';
 import 'rxjs/add/observable/interval';
-import { ToolbarItem } from '@syncfusion/ej2-angular-grids';
 
 @Component({
   selector: 'app-treegrid',
@@ -28,12 +25,7 @@ export class TreegridComponent implements OnInit {
   public contextMenuItems!: Object[];
   public selectionSettings: Object | undefined;
   public editparams: Object | undefined;
-  public d1data: Object | undefined;
-  public fields1: Object | undefined;
-  public d2data: Object | undefined;
-  public fields2: Object | undefined;
-  public d3data: Object | undefined;
-  public fields3: Object | undefined;
+
   sampleData: any;
   selectedRows: any[] = [];
   copiedRow: BaseDataItem;
@@ -46,23 +38,13 @@ export class TreegridComponent implements OnInit {
   @ViewChild('treegrid')
   public treegrid!: TreeGridComponent;
 
-  @ViewChild('dropdown1')
-  public dropdown1!: DropDownListComponent;
-
-  @ViewChild('dropdown2')
-  public dropdown2!: DropDownListComponent;
-
-  @ViewChild('dropdown3')
-  public dropdown3!: DropDownListComponent;
-
   @ViewChild('cellsection')
   cellsection!: ElementRef;
   contextMenuItempruralModel: ContextMenuItemModel[] = [];
   contextMenuItemCopyModel: ContextMenuItemModel[] = [];
   contextMenuItemsModel: ContextMenuItemModel[] = [];
   constructor(private dataService: DataService) {
-    //this.sub = Observable.interval(10000)
-    //  .subscribe((val) => { this.saveToFile(); });
+   
   }
 
   ngOnInit(): void {
@@ -92,43 +74,11 @@ export class TreegridComponent implements OnInit {
     this.editing = { allowDeleting: true, allowEditing: true, mode: 'Row' };
     this.toolbar = ['ColumnChooser'];
     this.editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true, mode: "Row" };
-    this.contextMenuItems = ['AutoFit', 'AutoFitAll', 'SortAscending', 'SortDescending', 'Edit', 'Delete', 'Save', 'Cancel', 'PdfExport', 'ExcelExport', 'CsvExport', 'FirstPage', 'PrevPage', 'LastPage', 'NextPage'];
-    this.fields1 = { text: 'type', value: 'id' };
-    this.d1data = [{ id: 'Single', type: 'Single' },
-    { id: 'Multiple', type: 'Multiple' }],
-      this.fields2 = { text: 'mode', value: 'id' };
-    this.d2data = [{ id: 'Row', mode: 'Row' },
-    { id: 'Cell', mode: 'Cell' },],
-      this.fields3 = { text: 'mode', value: 'id' };
-    this.d3data = [{ id: 'Flow', mode: 'Flow' },
-      { id: 'Box', mode: 'Box' }]
     this.toolbarOptions = ['Add', 'Edit', 'Delete', 'Update', 'Cancel'];
+    this.sub = Observable.interval(10000)
+      .subscribe((val) => { this.saveToFile(); });
   }
 
-  change1(e: ChangeEventArgs): void {
-    let type: any = <string>e.value;
-    let mode: any = <string>this.dropdown2.value;
-    this.treegrid.selectionSettings.type = type;
-    if (type === 'Multiple' && mode === 'Cell') {
-      this.cellsection.nativeElement.style.display = 'table-row';
-    } else {
-      this.cellsection.nativeElement.style.display = 'none';
-    }
-  }
-  change2(e: ChangeEventArgs): void {
-    let mode: any = e.value;
-    let type: any = <string>this.dropdown1.value;
-    this.treegrid.selectionSettings.mode = mode;
-    if (type === 'Multiple' && mode === 'Cell') {
-      this.cellsection.nativeElement.style.display = 'table-row';
-    } else {
-      this.cellsection.nativeElement.style.display = 'none';
-    }
-  }
-  change3(e: ChangeEventArgs): void {
-    let cellmode: any = <string>e.value;
-    this.treegrid.selectionSettings.cellSelectionMode = cellmode;
-  }
   contextMenuClick(args: ContextMenuClickEventArgs): void {
     this.copiedRow = args.rowInfo.rowData as BaseDataItem;
     switch (args.item.id) {
@@ -198,19 +148,6 @@ export class TreegridComponent implements OnInit {
     } else {
       this.treegrid.contextMenuItems = this.contextMenuItemsModel;
     }
-    //console.log(arg.rowInfo.rowIndex);
-    //let elem: Element = arg.event.target as Element;
-    //let uid: string = elem.closest('.e-row').getAttribute('data-uid');
-    //console.log(this.treegrid.grid.getRowObjectFromUID(uid).data);
-    //if (this.treegrid.grid.getRowObjectFromUID(uid).data) {
-    //  arg.cancel = true;
-    //} else {
-    //  let flag: boolean = this.getValue('expanded', this.treegrid.grid.getRowObjectFromUID(uid).data);
-    //  let val: string = flag ? 'none' : 'block';
-    //  document.querySelectorAll('li#expandrow')[0].setAttribute('style', 'display: ' + val + ';');
-    //  val = !flag ? 'none' : 'block';
-    //  document.querySelectorAll('li#collapserow')[0].setAttribute('style', 'display: ' + val + ';');
-    //}
   }
 
   getData() {

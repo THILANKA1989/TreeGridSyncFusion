@@ -127,7 +127,7 @@ itemsRouter.post("/updatejson", async (req: Request, res: Response) => {
 
 itemsRouter.post("/setMax/", async (req: Request, res: Response) => {
     try {
-        ItemService.setMaxRowNumber(req.body,parseInt(req.params.id));
+        //ItemService.setMaxRowNumber(req.body,parseInt(req.params.id);
         res.sendStatus(204);
     } catch (e) {
         res.status(500).send(e.message);

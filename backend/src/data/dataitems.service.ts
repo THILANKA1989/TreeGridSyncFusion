@@ -59,10 +59,20 @@ export const remove = async (id: number): Promise<null | void> => {
 };
 
 export const updateJson = async (container: BaseItemArray): Promise<null | void> => {
-    const json = JSON.stringify(container, null, 2);
-    //let jsonBody = JSON.parse(json);
+
+    let json = {};
+    if (container == null || container == undefined) {
+        return null;
+    }
+    if (dataItems.data == null || dataItems.data == undefined) {
+        console.log("HITED")
+        json = JSON.stringify({ "data": [], "lastIndex": 0 }, null, 2);
+    } else {
+        dataItems.data.map(obj => container.data.find(o => o.id === obj.id) || obj);
+        json = JSON.stringify(dataItems, null, 2);
+    }
     //console.log(json);
-    fs.writeFile('src/database/data.json', json, (err: any) => {
+    fs.writeFile('src/database/data.json', json, 'utf8',(err: any) => {
         // throws an error, you could also catch it here
         if (err) throw err;
 
@@ -79,23 +89,9 @@ export const getMaxRowNumber = async (): Promise<number> => {
     return dataItems.lastIndex;
 };
 
-export const setMaxRowNumber = async (container: BaseItemArray, currentIndex: number): Promise<number> => {
-    //lock.acquire(key, function (done) {
-    //    // async work    container.lastIndex = currentIndex + 1;
-    //    const json = JSON.stringify(container, null, 2);
-    //    fs.writeFile('../database/data.json', json, (err: any) => {
-    //        // throws an error, you could also catch it here
-    //        if (err) throw err;
-
-    //        // success case, the file was saved
-    //        console.log('File saved!');
-    //    });
-    //    done(err, ret);
-    //}, function (err, ret) {
-    //    // lock released
-    //}, opts);
-
-    return container.lastIndex;
+export const setMaxRowNumber = async (currentIndex: number): Promise<number> => {
+    dataItems.lastIndex = currentIndex;
+    return currentIndex;
 };
 
 export const paginatedData = async (pageSize: any, pageNumber: any): Promise<ResponseBody> => {
