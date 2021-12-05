@@ -25,7 +25,7 @@ export class DataService {
 
   updateJson(updateObj: BaseItemArray): Observable<any> {
     //created for body and pagination requests not implementing that for now
-    return this.http.post<any>(this.baseUrl + '/updateJson', updateObj);
+    return this.http.post<any>(this.baseUrl + 'updateJson', updateObj);
   }
 
 }

@@ -2,6 +2,7 @@
 import express, { Request, Response } from "express";
 import * as ItemService from "./dataitems.service";
 import { BaseDataItem, BaseItemArray, DataItem } from "./data.interface";
+import { debug } from "console";
 var AsyncLock = require('async-lock');
 var lock = new AsyncLock();
 
@@ -110,16 +111,17 @@ itemsRouter.delete("/:id", async (req: Request, res: Response) => {
 });
 
 itemsRouter.post("/updatejson", async (req: Request, res: Response) => {
+    debug();
     let Guid: string = "";
-
+    console.log(req.body);
     try {
-        lock.acquire(Guid, function () {
+        //lock.acquire(Guid, function () {
             // async work
             ItemService.updateJson(req.body);
             res.sendStatus(204);
-        }, function () {
+        //}, function () {
             // lock released
-        });
+        //});
     } catch (e) {
         res.status(500).send(e.message);
     }

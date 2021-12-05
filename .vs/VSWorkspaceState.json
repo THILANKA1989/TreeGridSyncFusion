@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\backend",
+    "\\backend\\src",
+    "\\backend\\src\\database",
+    "\\treeGrid",
+    "\\treeGrid\\src",
+    "\\treeGrid\\src\\app",
+    "\\treeGrid\\src\\app\\models",
+    "\\treeGrid\\src\\app\\websockets",
+    "\\treeGrid\\src\\environments"
+  ],
+  "PreviewInSolutionExplorer": false
+}

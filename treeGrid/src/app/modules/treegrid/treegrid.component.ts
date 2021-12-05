@@ -44,7 +44,8 @@ export class TreegridComponent implements OnInit {
   contextMenuItemCopyModel: ContextMenuItemModel[] = [];
   contextMenuItemsModel: ContextMenuItemModel[] = [];
   constructor(private dataService: DataService) {
-   
+    this.sub = Observable.interval(10000)
+      .subscribe((val) => { this.saveToFile(); });
   }
 
   ngOnInit(): void {
@@ -75,8 +76,6 @@ export class TreegridComponent implements OnInit {
     this.toolbar = ['ColumnChooser'];
     this.editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true, mode: "Row" };
     this.toolbarOptions = ['Add', 'Edit', 'Delete', 'Update', 'Cancel'];
-    this.sub = Observable.interval(10000)
-      .subscribe((val) => { this.saveToFile(); });
   }
 
   contextMenuClick(args: ContextMenuClickEventArgs): void {
@@ -173,6 +172,7 @@ export class TreegridComponent implements OnInit {
       "data": this.treegrid.dataSource,
       "lastIndex": this.totalRowCount
     } as BaseItemArray;
+    console.log(baseItemArray);
     this.dataService.updateJson(baseItemArray).subscribe((response: any) => {
       console.log(response);
     }, error => {

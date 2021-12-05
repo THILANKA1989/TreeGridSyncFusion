@@ -6,13 +6,14 @@
 import { BaseDataItem, BaseItemArray, DataItem } from "./data.interface";
 import { DataItems } from "./dataitems.interface";
 import dataJson from '../database/data.json';
+import { debug } from "console";
 const fs = require('fs');
 var AsyncLock = require('async-lock');
 var lock = new AsyncLock();
 /**
  * In-Memory Store
  */
-let dataItems: BaseItemArray = dataJson as unknown as BaseItemArray;
+const dataItems: BaseItemArray = dataJson as unknown as BaseItemArray;
 /**
  * Service Methods
  */
@@ -59,26 +60,35 @@ export const remove = async (id: number): Promise<null | void> => {
 };
 
 export const updateJson = async (container: BaseItemArray): Promise<null | void> => {
-
+    debug();
     let json = {};
-    if (container == null || container == undefined) {
+    if (container.data == null || container.data == undefined) {
         return null;
     }
     if (dataItems.data == null || dataItems.data == undefined) {
         console.log("HITED")
         json = JSON.stringify({ "data": [], "lastIndex": 0 }, null, 2);
     } else {
-        dataItems.data.map(obj => container.data.find(o => o.id === obj.id) || obj);
-        json = JSON.stringify(dataItems, null, 2);
+        //dataItems.data.map(obj => container.data.find(o => o.id === obj.id) || obj);
     }
-    //console.log(json);
-    fs.writeFile('src/database/data.json', json, 'utf8',(err: any) => {
-        // throws an error, you could also catch it here
-        if (err) throw err;
-
-        // success case, the file was saved
-        console.log('File saved!');
-    });
+    console.log(json);
+    (async () => {
+        await new Promise((resolve, reject) => {
+          fs.writeFile(
+            `src/database/data.json`, 
+            JSON.stringify(dataItems),
+            function(err) {
+              if (err) {
+                reject()
+                return console.log(err)
+              }
+              resolve()
+            }
+          )
+        });
+        const file = require(`src/database/data.json`)
+      })();
+      
     if (!container) {
         return null;
     }
