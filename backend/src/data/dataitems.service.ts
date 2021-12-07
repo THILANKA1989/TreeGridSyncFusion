@@ -68,7 +68,13 @@ export const updateJson = async (container: BaseItemArray): Promise<null | void>
     if (dataItems.data == null || dataItems.data == undefined) {
         json = JSON.stringify({ "data": [], "lastIndex": 0 }, null, 2);
     } else {
-        dataItems.data.map(obj => container.data.find(o => o.id === obj.id) || obj);
+        container.data.map(obj => dataItems.data.find(o => o.id === obj.id) || obj);
+        container.data.forEach(updatedObj=> {
+            let indexInMasterData = dataItems.data.map(masterDataObj => masterDataObj.id).indexOf(updatedObj.id);
+            if (indexInMasterData !== undefined) dataItems.data.splice(indexInMasterData, 1, updatedObj);
+        });
+        
+        console.log(dataItems.data.find((o: { id: number; })=>o.id===3 || o.id===2 || o.id===1));
     }
     
     (async () => {

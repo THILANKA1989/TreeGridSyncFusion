@@ -7,6 +7,7 @@ import { BaseDataItem, BaseItemArray } from '../../models/data.model';
 import { Subscription } from 'rxjs';
 import { Observable } from 'rxjs';
 import 'rxjs/add/observable/interval';
+import { ObjecMapper } from 'src/app/functions/util.functions';
 
 @Component({
   selector: 'app-treegrid',
@@ -16,7 +17,7 @@ import 'rxjs/add/observable/interval';
 })
 export class TreegridComponent implements OnInit {
 
-  public data: Object[] | undefined;
+  public data: BaseDataItem[] | undefined;
   public pageSettings: PageSettingsModel | undefined;
   public editing: EditSettingsModel | undefined;
   public toolbar: string[] | undefined;
@@ -80,11 +81,14 @@ export class TreegridComponent implements OnInit {
 
   contextMenuClick(args: ContextMenuClickEventArgs): void {
     this.copiedRow = args.rowInfo.rowData as BaseDataItem;
+    let newRow = new ObjecMapper(this.copiedRow) as BaseDataItem;
+    console.log(newRow);
+    let initArray : BaseDataItem[] = [];
     switch (args.item.id) {
       case 'copy-row': {
         //statements;
         this.copiedRow = args.rowInfo.rowData as BaseDataItem;
-        console.log(this.copiedRow);
+        console.log(newRow);
         this.contextMenuItemsModel.push(
           { text: 'Paste Next', target: '.e-content', id: 'paste-next' },
           { text: 'Paste Child', target: '.e-content', id: 'paste-child' });
@@ -93,21 +97,22 @@ export class TreegridComponent implements OnInit {
       case 'paste-child': {
         //statements;
         let parentRow = args.rowInfo.rowData as BaseDataItem;
-
-        this.copiedRow.id = this.totalRowCount + 1;
+        newRow.id = this.totalRowCount + 1;
         if (!parentRow.children) {
           parentRow.children = [];
         }
-        parentRow.children.push(this.copiedRow);
+        parentRow.children.push(newRow);
+        initArray.push(parentRow);
+        this.editBaseData(initArray);
         this.treegrid.addRecord(parentRow, parentRow.id-1);
         this.sampleData = this.treegrid.dataSource;
         this.treegrid.refresh();
-        console.log(parentRow);
         break;
       }
       case 'copy-rows': {
         //statements;
-        this.copiedRow = args.rowInfo.rowData as BaseDataItem;
+        let copRow = args.rowInfo.rowData as BaseDataItem;
+        this.copiedRow = new ObjecMapper(copRow) as BaseDataItem;
         console.log(this.copiedRow);
         this.treegrid.contextMenuItems = this.contextMenuItemCopyModel;
         break;
@@ -124,27 +129,18 @@ export class TreegridComponent implements OnInit {
         break;
       }
     }
-    var idx: any = args.rowInfo?.rowIndex
-    if (args.item.id === 'addchild') {        // add child  
-      var data = { taskID: 88, priority: "high" };
-      this.treegrid.addRecord(data, idx, "Child"); // pass data, index, position  
-    }
-
-    else if (args.item.id === 'copy') {
-      this.treegrid.selectRow(idx);
-
-      this.treegrid.copy();
-    }
   }
 
   contextMenuOpen(arg: BeforeOpenCloseEventArgs): void {
+    
     var selectedrowindex = this.treegrid.getSelectedRowIndexes();
     var ifMultipleSelected = 1 < selectedrowindex.length;
-    console.log(selectedrowindex);
-    console.log(ifMultipleSelected);
+    
     if (ifMultipleSelected) {
       this.treegrid.contextMenuItems = this.contextMenuItempruralModel;
-    } else {
+    }else if(this.copiedRow != null){
+      this.treegrid.contextMenuItems = this.contextMenuItemCopyModel;
+    }else{
       this.treegrid.contextMenuItems = this.contextMenuItemsModel;
     }
   }
@@ -169,7 +165,7 @@ export class TreegridComponent implements OnInit {
 
   saveToFile(): any {
     const baseItemArray = {
-      "data": this.treegrid.dataSource,
+      "data": this.data,
       "lastIndex": this.totalRowCount
     } as BaseItemArray;
     console.log(baseItemArray);
@@ -177,6 +173,10 @@ export class TreegridComponent implements OnInit {
       console.log(response);
     }, error => {
     });
+  }
+
+  editBaseData(data:BaseDataItem[]){
+    this.data.map(obj => data.find(o => o.id === obj.id) || obj);
   }
 
 }

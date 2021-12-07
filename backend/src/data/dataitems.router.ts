@@ -112,7 +112,6 @@ itemsRouter.delete("/:id", async (req: Request, res: Response) => {
 
 itemsRouter.post("/updatejson", async (req: Request, res: Response) => {
     debug();
-    console.log(req.body.data.find((o: { id: number; })=>o.id===3 || o.id===2 || o.id===1));
     let Guid: string = "";
     try {
         //lock.acquire(Guid, function () {

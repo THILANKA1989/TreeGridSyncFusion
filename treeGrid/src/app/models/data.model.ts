@@ -24,6 +24,8 @@ export interface BaseDataItem {
   longitude: number;
   tags: string[];
   children: BaseDataItem[];
+  pareintId?: number;
+  isParent?: number;
 
 }
 
