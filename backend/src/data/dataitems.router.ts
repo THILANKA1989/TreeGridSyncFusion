@@ -18,7 +18,7 @@ itemsRouter.get("/parent", async (req: Request, res: Response) => {
     try {
         const item: BaseItemArray = await ItemService.findParent();
         res.status(200).send(item);
-    } catch (e) {
+    } catch (e: any) {
         res.status(500).send(e.message);
     }
 });
@@ -40,7 +40,7 @@ itemsRouter.get("/", async (req: Request, res: Response) => {
         const items: DataItem[] = await ItemService.findAll();
 
         res.status(200).send(items);
-    } catch (e) {
+    } catch (e: any) {
         res.status(500).send(e.message);
     }
 });
@@ -57,7 +57,7 @@ itemsRouter.get("/:id", async (req: Request, res: Response) => {
         }
 
         res.status(404).send("item not found");
-    } catch (e) {
+    } catch (e: any) {
         res.status(500).send(e.message);
     }
 });
@@ -71,7 +71,7 @@ itemsRouter.post("/", async (req: Request, res: Response) => {
         const newItem = await ItemService.create(item);
 
         res.status(201).json(newItem);
-    } catch (e) {
+    } catch (e: any) {
         res.status(500).send(e.message);
     }
 });
@@ -93,7 +93,7 @@ itemsRouter.put("/:id", async (req: Request, res: Response) => {
         const newItem = await ItemService.create(itemUpdate);
 
         res.status(201).json(newItem);
-    } catch (e) {
+    } catch (e: any) {
         res.status(500).send(e.message);
     }
 });
@@ -105,15 +105,15 @@ itemsRouter.delete("/:id", async (req: Request, res: Response) => {
         await ItemService.remove(id);
 
         res.sendStatus(204);
-    } catch (e) {
+    } catch (e: any) {
         res.status(500).send(e.message);
     }
 });
 
 itemsRouter.post("/updatejson", async (req: Request, res: Response) => {
     debug();
+    console.log(req.body.data.find((o: { id: number; })=>o.id===3 || o.id===2 || o.id===1));
     let Guid: string = "";
-    console.log(req.body);
     try {
         //lock.acquire(Guid, function () {
             // async work
@@ -122,7 +122,7 @@ itemsRouter.post("/updatejson", async (req: Request, res: Response) => {
         //}, function () {
             // lock released
         //});
-    } catch (e) {
+    } catch (e: any) {
         res.status(500).send(e.message);
     }
 });
@@ -131,7 +131,7 @@ itemsRouter.post("/setMax/", async (req: Request, res: Response) => {
     try {
         //ItemService.setMaxRowNumber(req.body,parseInt(req.params.id);
         res.sendStatus(204);
-    } catch (e) {
+    } catch (e: any) {
         res.status(500).send(e.message);
     }
 });
@@ -141,7 +141,7 @@ itemsRouter.get("/getMax", async (req: Request, res: Response) => {
         let number = ItemService.getMaxRowNumber();
 
         res.status(200).send(number);
-    } catch (e) {
+    } catch (e: any) {
         res.status(500).send(e.message);
     }
 });

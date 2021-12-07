@@ -66,27 +66,25 @@ export const updateJson = async (container: BaseItemArray): Promise<null | void>
         return null;
     }
     if (dataItems.data == null || dataItems.data == undefined) {
-        console.log("HITED")
         json = JSON.stringify({ "data": [], "lastIndex": 0 }, null, 2);
     } else {
-        //dataItems.data.map(obj => container.data.find(o => o.id === obj.id) || obj);
+        dataItems.data.map(obj => container.data.find(o => o.id === obj.id) || obj);
     }
-    console.log(json);
+    
     (async () => {
         await new Promise((resolve, reject) => {
-          fs.writeFile(
+          fs.writeFileSync(
             `src/database/data.json`, 
-            JSON.stringify(dataItems),
-            function(err) {
+            JSON.stringify(dataItems,null,2),
+            function(err: any) {
               if (err) {
                 reject()
                 return console.log(err)
               }
-              resolve()
+              resolve(err)
             }
           )
         });
-        const file = require(`src/database/data.json`)
       })();
       
     if (!container) {
